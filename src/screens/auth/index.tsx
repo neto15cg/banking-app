@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Image, TextInput, TouchableOpacity, Text } from 'react-native';
-import { NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
+import { NavigationScreenProp, NavigationState, NavigationParams, ScrollView } from 'react-navigation';
 //@ts-ignore
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Ionicons, AntDesign } from '@expo/vector-icons';
@@ -13,18 +13,40 @@ export interface Props {
 }
 
 export default function Auth(props: Props) {
-  const [step, setStep] = useState('initial');
+  const [step, setStep] = useState('accountUpload');
   const [code, setCode] = useState([]);
+  const [phone, setPhone] = useState(['+', '5', '5']);
 
-  function handleNumber(n: number) {
+  function addCodeNumber(n: number, type?: string) {
     setCode(code.length <= 3 ? [...code, n] : [...code]);
+    if (type && type === 'accountCode') {
+      if (code.length === 3) {
+        setTimeout(() => {
+          setStep('accountUpload');
+          setCode([]);
+        }, 100);
+      }
+    }
   }
 
-  function removeNumber() {
+  function removeCodeNumber() {
     let tempCode = code;
     if (tempCode.length > 0) {
       tempCode.pop();
       setCode([...tempCode]);
+    }
+  }
+
+  function addPhoneNumber(n: number) {
+    let nS = n.toString();
+    setPhone(phone.length <= 13 ? [...phone, nS] : [...phone]);
+  }
+
+  function removePhoneNumber() {
+    let tempPhone = phone;
+    if (tempPhone.length > 1) {
+      tempPhone.pop();
+      setPhone([...tempPhone]);
     }
   }
 
@@ -180,7 +202,11 @@ export default function Auth(props: Props) {
                       justifyContent: 'center',
                     }}
                   >
-                    <Text style={{ fontSize: 40, color: '#352641' }}>{typeof code[0] === 'number' ? code[0] : ''}</Text>
+                    <Animation durantion={200}>
+                      <Text style={{ fontSize: 40, color: '#352641' }}>
+                        {typeof code[0] === 'number' ? code[0] : undefined}
+                      </Text>
+                    </Animation>
                   </View>
                   <View
                     style={{
@@ -192,7 +218,11 @@ export default function Auth(props: Props) {
                       justifyContent: 'center',
                     }}
                   >
-                    <Text style={{ fontSize: 40, color: '#352641' }}>{typeof code[1] === 'number' ? code[1] : ''}</Text>
+                    <Animation durantion={200}>
+                      <Text style={{ fontSize: 40, color: '#352641' }}>
+                        {typeof code[1] === 'number' ? code[1] : undefined}
+                      </Text>
+                    </Animation>
                   </View>
                   <View
                     style={{
@@ -204,19 +234,29 @@ export default function Auth(props: Props) {
                       justifyContent: 'center',
                     }}
                   >
-                    <Text style={{ fontSize: 40, color: '#352641' }}>{typeof code[2] === 'number' ? code[2] : ''}</Text>
+                    <Animation durantion={200}>
+                      <Text style={{ fontSize: 40, color: '#352641' }}>
+                        {typeof code[2] === 'number' ? code[2] : undefined}
+                      </Text>
+                    </Animation>
                   </View>
-                  <View
-                    style={{
-                      height: 81,
-                      width: 57,
-                      backgroundColor: '#E3EBEE',
-                      borderRadius: 20,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <Text style={{ fontSize: 40, color: '#352641' }}>{typeof code[3] === 'number' ? code[3] : ''}</Text>
+                  <View>
+                    <View
+                      style={{
+                        height: 81,
+                        width: 57,
+                        backgroundColor: '#E3EBEE',
+                        borderRadius: 20,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Animation durantion={200}>
+                        <Text style={{ fontSize: 40, color: '#352641' }}>
+                          {typeof code[3] === 'number' ? code[3] : undefined}
+                        </Text>
+                      </Animation>
+                    </View>
                   </View>
                 </View>
 
@@ -228,39 +268,39 @@ export default function Auth(props: Props) {
                 <View
                   style={{ padding: 10, alignItems: 'center', justifyContent: 'space-around', flexDirection: 'row' }}
                 >
-                  <TouchableOpacity style={{ padding: 5 }} onPress={() => handleNumber(1)}>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addCodeNumber(1)}>
                     <Text style={{ fontSize: 40, color: '#352641' }}>1</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={{ padding: 5 }} onPress={() => handleNumber(2)}>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addCodeNumber(2)}>
                     <Text style={{ fontSize: 40, color: '#352641' }}>2</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={{ padding: 5 }} onPress={() => handleNumber(3)}>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addCodeNumber(3)}>
                     <Text style={{ fontSize: 40, color: '#352641' }}>3</Text>
                   </TouchableOpacity>
                 </View>
                 <View
                   style={{ padding: 10, alignItems: 'center', justifyContent: 'space-around', flexDirection: 'row' }}
                 >
-                  <TouchableOpacity style={{ padding: 5 }} onPress={() => handleNumber(4)}>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addCodeNumber(4)}>
                     <Text style={{ fontSize: 40, color: '#352641' }}>4</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={{ padding: 5 }} onPress={() => handleNumber(5)}>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addCodeNumber(5)}>
                     <Text style={{ fontSize: 40, color: '#352641' }}>5</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={{ padding: 5 }} onPress={() => handleNumber(6)}>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addCodeNumber(6)}>
                     <Text style={{ fontSize: 40, color: '#352641' }}>6</Text>
                   </TouchableOpacity>
                 </View>
                 <View
                   style={{ padding: 10, alignItems: 'center', justifyContent: 'space-around', flexDirection: 'row' }}
                 >
-                  <TouchableOpacity style={{ padding: 5 }} onPress={() => handleNumber(7)}>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addCodeNumber(7)}>
                     <Text style={{ fontSize: 40, color: '#352641' }}>7</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={{ padding: 5 }} onPress={() => handleNumber(8)}>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addCodeNumber(8)}>
                     <Text style={{ fontSize: 40, color: '#352641' }}>8</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={{ padding: 5 }} onPress={() => handleNumber(9)}>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addCodeNumber(9)}>
                     <Text style={{ fontSize: 40, color: '#352641' }}>9</Text>
                   </TouchableOpacity>
                 </View>
@@ -270,10 +310,10 @@ export default function Auth(props: Props) {
                   <View>
                     <Text style={{ fontSize: 40, color: '#FFFFFF' }}>0</Text>
                   </View>
-                  <TouchableOpacity style={{ padding: 5 }} onPress={() => handleNumber(0)}>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addCodeNumber(0)}>
                     <Text style={{ fontSize: 40, color: '#352641' }}>0</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={{ padding: 5 }} onPress={() => removeNumber()}>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => removeCodeNumber()}>
                     <Ionicons name="ios-backspace" size={40} color="#9599B3"></Ionicons>
                   </TouchableOpacity>
                 </View>
@@ -448,10 +488,403 @@ export default function Auth(props: Props) {
                     placeholder="Address"
                   ></TextInput>
                 </View>
-                <Button title="Next" onClick={() => setStep('loginCode')} />
+                <Button title="Next" onClick={() => setStep('accountPhone')} />
               </View>
               <View style={{ flex: 3, alignItems: 'center', justifyContent: 'flex-end' }}>
                 <TouchableOpacity>
+                  <Text style={{ color: '#07877D', fontSize: 16 }}>Need support?</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Animation>
+        </View>
+      ) : (
+        undefined
+      )}
+      {step === 'accountPhone' ? (
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: '#E3EBEE',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            position: 'relative',
+          }}
+        >
+          <View
+            style={{
+              height: '20%',
+              width: '100%',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              paddingRight: 23,
+              paddingLeft: 23,
+            }}
+          >
+            <TouchableOpacity>
+              <AntDesign name="left" size={40} color="#000000"></AntDesign>
+            </TouchableOpacity>
+            <Text style={{ fontSize: 16 }}>2/4</Text>
+            <Image source={Logo} style={{ width: 47, height: 62 }}></Image>
+          </View>
+          <Animation
+            style={{
+              backgroundColor: '#FFFFFF',
+              width: '100%',
+              height: '80%',
+              bottom: 0,
+              borderTopRightRadius: 50,
+              borderTopLeftRadius: 50,
+              padding: 30,
+            }}
+            durantion={800}
+          >
+            <View style={{ flex: 1 }}>
+              <View style={{ flex: 10, alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#202426' }}>Phone Number</Text>
+              </View>
+              <View
+                style={{
+                  flex: 10,
+                  padding: '5%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <ScrollView
+                  horizontal={true}
+                  style={{ width: '100%', borderBottomColor: '#D3DBDE', borderBottomWidth: 1 }}
+                >
+                  <View
+                    style={{
+                      justifyContent: 'flex-start',
+                      alignItems: 'flex-start',
+                      flexDirection: 'row',
+                      width: '100%',
+                      paddingRight: 10,
+                      paddingLeft: 10,
+                      paddingBottom: 30,
+                    }}
+                  >
+                    {phone.map((item, index) => {
+                      return (
+                        <Animation key={index} durantion={200}>
+                          <Text
+                            style={{ fontSize: 28, color: '#202426', marginLeft: index === 3 || index === 5 ? 5 : 0 }}
+                          >
+                            {index === 9 ? '-' : ''}
+                            {item}
+                          </Text>
+                        </Animation>
+                      );
+                    })}
+                  </View>
+                </ScrollView>
+              </View>
+              <View style={{ flex: 50 }}>
+                <View
+                  style={{ padding: 10, alignItems: 'center', justifyContent: 'space-around', flexDirection: 'row' }}
+                >
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addPhoneNumber(1)}>
+                    <Text style={{ fontSize: 40, color: '#352641' }}>1</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addPhoneNumber(2)}>
+                    <Text style={{ fontSize: 40, color: '#352641' }}>2</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addPhoneNumber(3)}>
+                    <Text style={{ fontSize: 40, color: '#352641' }}>3</Text>
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={{ padding: 10, alignItems: 'center', justifyContent: 'space-around', flexDirection: 'row' }}
+                >
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addPhoneNumber(4)}>
+                    <Text style={{ fontSize: 40, color: '#352641' }}>4</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addPhoneNumber(5)}>
+                    <Text style={{ fontSize: 40, color: '#352641' }}>5</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addPhoneNumber(6)}>
+                    <Text style={{ fontSize: 40, color: '#352641' }}>6</Text>
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={{ padding: 10, alignItems: 'center', justifyContent: 'space-around', flexDirection: 'row' }}
+                >
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addPhoneNumber(7)}>
+                    <Text style={{ fontSize: 40, color: '#352641' }}>7</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addPhoneNumber(8)}>
+                    <Text style={{ fontSize: 40, color: '#352641' }}>8</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addPhoneNumber(9)}>
+                    <Text style={{ fontSize: 40, color: '#352641' }}>9</Text>
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={{ padding: 10, alignItems: 'center', justifyContent: 'space-around', flexDirection: 'row' }}
+                >
+                  <View style={{ padding: 5 }}>
+                    <Text style={{ fontSize: 40, color: '#FFFFFF' }}>0</Text>
+                  </View>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addPhoneNumber(0)}>
+                    <Text style={{ fontSize: 40, color: '#352641' }}>0</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => removePhoneNumber()}>
+                    <Ionicons name="ios-backspace" size={32} color="#9599B3"></Ionicons>
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View style={{ flex: 30, alignItems: 'center', justifyContent: 'space-between' }}>
+                <Button title="Verify" onClick={() => setStep('accountCode')} />
+                <TouchableOpacity style={{ marginTop: 20 }}>
+                  <Text style={{ color: '#07877D', fontSize: 16 }}>Need support?</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Animation>
+        </View>
+      ) : (
+        undefined
+      )}
+
+      {step === 'accountCode' ? (
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: '#E3EBEE',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            position: 'relative',
+          }}
+        >
+          <View
+            style={{
+              height: '20%',
+              width: '100%',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              paddingRight: 23,
+              paddingLeft: 23,
+            }}
+          >
+            <TouchableOpacity>
+              <AntDesign name="left" size={40} color="#000000"></AntDesign>
+            </TouchableOpacity>
+            <Text style={{ fontSize: 16 }}>3/4</Text>
+            <Image source={Logo} style={{ width: 47, height: 62 }}></Image>
+          </View>
+          <Animation
+            style={{
+              backgroundColor: '#FFFFFF',
+              width: '100%',
+              height: '80%',
+              bottom: 0,
+              borderTopRightRadius: 50,
+              borderTopLeftRadius: 50,
+              padding: 30,
+            }}
+            durantion={800}
+          >
+            <View style={{ flex: 1 }}>
+              <View style={{ flex: 10, alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#202426' }}>Verification Code</Text>
+              </View>
+              <View
+                style={{
+                  padding: '5%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <View
+                  style={{
+                    justifyContent: 'space-evenly',
+                    alignItems: 'flex-start',
+                    flexDirection: 'row',
+                    width: '100%',
+                  }}
+                >
+                  <View
+                    style={{
+                      height: 81,
+                      width: 57,
+                      backgroundColor: '#E3EBEE',
+                      borderRadius: 20,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Animation durantion={200}>
+                      <Text style={{ fontSize: 40, color: '#352641' }}>
+                        {typeof code[0] === 'number' ? code[0] : undefined}
+                      </Text>
+                    </Animation>
+                  </View>
+                  <View
+                    style={{
+                      height: 81,
+                      width: 57,
+                      backgroundColor: '#E3EBEE',
+                      borderRadius: 20,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Animation durantion={200}>
+                      <Text style={{ fontSize: 40, color: '#352641' }}>
+                        {typeof code[1] === 'number' ? code[1] : undefined}
+                      </Text>
+                    </Animation>
+                  </View>
+                  <View
+                    style={{
+                      height: 81,
+                      width: 57,
+                      backgroundColor: '#E3EBEE',
+                      borderRadius: 20,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Animation durantion={200}>
+                      <Text style={{ fontSize: 40, color: '#352641' }}>
+                        {typeof code[2] === 'number' ? code[2] : undefined}
+                      </Text>
+                    </Animation>
+                  </View>
+                  <View>
+                    <View
+                      style={{
+                        height: 81,
+                        width: 57,
+                        backgroundColor: '#E3EBEE',
+                        borderRadius: 20,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Animation durantion={200}>
+                        <Text style={{ fontSize: 40, color: '#352641' }}>
+                          {typeof code[3] === 'number' ? code[3] : undefined}
+                        </Text>
+                      </Animation>
+                    </View>
+                  </View>
+                </View>
+
+                <TouchableOpacity style={{ marginTop: '5%' }}>
+                  <Text style={{ color: '#07877D', fontSize: 16 }}>Resend code</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={{ flex: 70 }}>
+                <View
+                  style={{ padding: 10, alignItems: 'center', justifyContent: 'space-around', flexDirection: 'row' }}
+                >
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addCodeNumber(1, 'accountCode')}>
+                    <Text style={{ fontSize: 40, color: '#352641' }}>1</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addCodeNumber(2, 'accountCode')}>
+                    <Text style={{ fontSize: 40, color: '#352641' }}>2</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addCodeNumber(3, 'accountCode')}>
+                    <Text style={{ fontSize: 40, color: '#352641' }}>3</Text>
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={{ padding: 10, alignItems: 'center', justifyContent: 'space-around', flexDirection: 'row' }}
+                >
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addCodeNumber(4, 'accountCode')}>
+                    <Text style={{ fontSize: 40, color: '#352641' }}>4</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addCodeNumber(5, 'accountCode')}>
+                    <Text style={{ fontSize: 40, color: '#352641' }}>5</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addCodeNumber(6, 'accountCode')}>
+                    <Text style={{ fontSize: 40, color: '#352641' }}>6</Text>
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={{ padding: 10, alignItems: 'center', justifyContent: 'space-around', flexDirection: 'row' }}
+                >
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addCodeNumber(7, 'accountCode')}>
+                    <Text style={{ fontSize: 40, color: '#352641' }}>7</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addCodeNumber(8, 'accountCode')}>
+                    <Text style={{ fontSize: 40, color: '#352641' }}>8</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addCodeNumber(9, 'accountCode')}>
+                    <Text style={{ fontSize: 40, color: '#352641' }}>9</Text>
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={{ padding: 10, alignItems: 'center', justifyContent: 'space-around', flexDirection: 'row' }}
+                >
+                  <View>
+                    <Text style={{ fontSize: 40, color: '#FFFFFF' }}>0</Text>
+                  </View>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => addCodeNumber(0, 'accountCode')}>
+                    <Text style={{ fontSize: 40, color: '#352641' }}>0</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => removeCodeNumber()}>
+                    <Ionicons name="ios-backspace" size={40} color="#9599B3"></Ionicons>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Animation>
+        </View>
+      ) : (
+        undefined
+      )}
+      {step === 'accountUpload' ? (
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: '#E3EBEE',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            position: 'relative',
+          }}
+        >
+          <View
+            style={{
+              height: '20%',
+              width: '100%',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              paddingRight: 23,
+              paddingLeft: 23,
+            }}
+          >
+            <TouchableOpacity>
+              <AntDesign name="left" size={40} color="#000000"></AntDesign>
+            </TouchableOpacity>
+            <Text style={{ fontSize: 16 }}>4/4</Text>
+            <Image source={Logo} style={{ width: 47, height: 62 }}></Image>
+          </View>
+          <Animation
+            style={{
+              backgroundColor: '#FFFFFF',
+              width: '100%',
+              height: '80%',
+              bottom: 0,
+              borderTopRightRadius: 50,
+              borderTopLeftRadius: 50,
+              padding: 30,
+            }}
+            durantion={800}
+          >
+            <View style={{ flex: 1 }}>
+              <View style={{ flex: 90 }}>
+                <View style={{ flex: 1, borderWidth: 1, borderColor: '#E3EBEE', borderRadius: 20 }}></View>
+              </View>
+              <View style={{ flex: 10, alignItems: 'center', justifyContent: 'center' }}>
+                <Button title="Verify" onClick={() => setStep('accountCode')} />
+                <TouchableOpacity style={{ marginTop: 20 }}>
                   <Text style={{ color: '#07877D', fontSize: 16 }}>Need support?</Text>
                 </TouchableOpacity>
               </View>
