@@ -1,7 +1,7 @@
 # BankingApp
 
 BankingApp it's a app created in React Native using [EXPO](https://expo.io) with objective of study.
-The layout used in this APP was made by [Alessandro Cataldi](https://www.behance.net/alessandrocataldi) and can find in [XDGURU](https://www.xdguru.com/banking-app-concept-xd/)
+The layout used in this APP was made by [Alessandro Cataldi](https://www.behance.net/alessandrocataldi) and you can find in [XDGURU](https://www.xdguru.com/banking-app-concept-xd/).
 
 # Installation
 
