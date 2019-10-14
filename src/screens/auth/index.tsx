@@ -20,7 +20,6 @@ export default function Auth(props: Props) {
   const [code, setCode] = useState([]);
   const [phone, setPhone] = useState(['+', '5', '5']);
   const [image, setImage] = useState(null);
-
   var backHandler: any;
 
   useEffect(() => {
@@ -56,7 +55,7 @@ export default function Auth(props: Props) {
         setTimeout(() => {
           setStep('accountUpload');
           setCode([]);
-        }, 100);
+        }, 1000);
       }
     }
   }
@@ -83,13 +82,13 @@ export default function Auth(props: Props) {
   }
 
   function backPress() {
-    console.log(step);
-
     switch (step) {
       case 'accountUpload':
+        setCode([]);
         setStep('accountCode');
         return true;
       case 'accountCode':
+        setPhone(['+', '5', '5']);
         setStep('accountPhone');
         return true;
       case 'accountPhone':
@@ -102,6 +101,7 @@ export default function Auth(props: Props) {
         setStep('initial');
         return true;
       case 'loginCode':
+        setCode([]);
         setStep('loginEmail');
         return true;
       case 'loginEmail':
@@ -376,7 +376,7 @@ export default function Auth(props: Props) {
                     <Text style={{ fontSize: 40, color: '#352641' }}>0</Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={{ padding: 5 }} onPress={() => removeCodeNumber()}>
-                    <Ionicons name="ios-backspace" size={40} color="#9599B3"></Ionicons>
+                    <Ionicons name="ios-backspace" size={32} color="#9599B3"></Ionicons>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -608,7 +608,7 @@ export default function Auth(props: Props) {
               <View
                 style={{
                   flex: 10,
-                  padding: '5%',
+                  padding: 30,
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
@@ -697,7 +697,7 @@ export default function Auth(props: Props) {
                   </TouchableOpacity>
                 </View>
               </View>
-              <View style={{ flex: 30, alignItems: 'center', justifyContent: 'space-between' }}>
+              <View style={{ flex: 30, alignItems: 'center', justifyContent: 'space-between', marginBottom: 100 }}>
                 <Button title="Verify" onClick={() => setStep('accountCode')} />
                 <TouchableOpacity style={{ marginTop: 20 }}>
                   <Text style={{ color: '#07877D', fontSize: 16 }}>Need support?</Text>
@@ -839,7 +839,7 @@ export default function Auth(props: Props) {
                   <Text style={{ color: '#07877D', fontSize: 16 }}>Resend code</Text>
                 </TouchableOpacity>
               </View>
-              <View style={{ flex: 70 }}>
+              <View style={{ flex: 70, marginBottom: 100 }}>
                 <View
                   style={{ padding: 10, alignItems: 'center', justifyContent: 'space-around', flexDirection: 'row' }}
                 >
@@ -889,7 +889,7 @@ export default function Auth(props: Props) {
                     <Text style={{ fontSize: 40, color: '#352641' }}>0</Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={{ padding: 5 }} onPress={() => removeCodeNumber()}>
-                    <Ionicons name="ios-backspace" size={40} color="#9599B3"></Ionicons>
+                    <Ionicons name="ios-backspace" size={32} color="#9599B3"></Ionicons>
                   </TouchableOpacity>
                 </View>
               </View>
