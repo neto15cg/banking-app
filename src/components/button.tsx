@@ -6,6 +6,7 @@ export interface Props {
   onClick: () => any;
   style?: any;
   textStyle?: any;
+  disabled?: boolean;
 }
 
 export default function components(props: Props) {
@@ -23,6 +24,7 @@ export default function components(props: Props) {
         ...props.style,
       }}
       onPress={() => props.onClick()}
+      disabled={props.disabled}
     >
       <Text style={{ fontSize: 16, color: '#FFFFFF', ...props.textStyle }}>{props.title}</Text>
     </TouchableOpacity>

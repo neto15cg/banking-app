@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Image, TextInput, TouchableOpacity, Text } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, Image, BackHandler } from 'react-native';
 import { NavigationScreenProp, NavigationState, NavigationParams, ScrollView } from 'react-navigation';
-//@ts-ignore
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Ionicons, AntDesign } from '@expo/vector-icons';
+import { Ionicons, AntDesign, MaterialIcons } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
+import Constants from 'expo-constants';
+import * as Permissions from 'expo-permissions';
+
 import Animation from '../../components/Animations/Fade';
 import Button from '../../components/button';
 const Logo = require('../../../assets/logo.png');
@@ -13,9 +16,38 @@ export interface Props {
 }
 
 export default function Auth(props: Props) {
-  const [step, setStep] = useState('accountUpload');
+  const [step, setStep] = useState('initial');
   const [code, setCode] = useState([]);
   const [phone, setPhone] = useState(['+', '5', '5']);
+  const [image, setImage] = useState(null);
+
+  var backHandler: any;
+
+  useEffect(() => {
+    getPermissionAsync();
+    backHandler = BackHandler.addEventListener('hardwareBackPress', backPress);
+  }, [step]);
+
+  async function getPermissionAsync() {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== 'granted') {
+        alert('Sorry, we need camera roll permissions to make this work!');
+      }
+    }
+  }
+
+  async function pickImage() {
+    let result: any = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: false,
+      aspect: [4, 3],
+    });
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  }
 
   function addCodeNumber(n: number, type?: string) {
     setCode(code.length <= 3 ? [...code, n] : [...code]);
@@ -47,6 +79,36 @@ export default function Auth(props: Props) {
     if (tempPhone.length > 1) {
       tempPhone.pop();
       setPhone([...tempPhone]);
+    }
+  }
+
+  function backPress() {
+    console.log(step);
+
+    switch (step) {
+      case 'accountUpload':
+        setStep('accountCode');
+        return true;
+      case 'accountCode':
+        setStep('accountPhone');
+        return true;
+      case 'accountPhone':
+        setStep('accountData');
+        return true;
+      case 'accountData':
+        setStep('accountInitial');
+        return true;
+      case 'accountInitial':
+        setStep('initial');
+        return true;
+      case 'loginCode':
+        setStep('loginEmail');
+        return true;
+      case 'loginEmail':
+        setStep('initial');
+        return true;
+      default:
+        break;
     }
   }
 
@@ -393,7 +455,6 @@ export default function Auth(props: Props) {
       ) : (
         undefined
       )}
-
       {step === 'accountData' ? (
         <View
           style={{
@@ -415,7 +476,7 @@ export default function Auth(props: Props) {
               paddingLeft: 23,
             }}
           >
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => backPress()}>
               <AntDesign name="left" size={40} color="#000000"></AntDesign>
             </TouchableOpacity>
             <Text style={{ fontSize: 16 }}>1/4</Text>
@@ -522,7 +583,7 @@ export default function Auth(props: Props) {
               paddingLeft: 23,
             }}
           >
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => backPress()}>
               <AntDesign name="left" size={40} color="#000000"></AntDesign>
             </TouchableOpacity>
             <Text style={{ fontSize: 16 }}>2/4</Text>
@@ -648,7 +709,6 @@ export default function Auth(props: Props) {
       ) : (
         undefined
       )}
-
       {step === 'accountCode' ? (
         <View
           style={{
@@ -670,7 +730,7 @@ export default function Auth(props: Props) {
               paddingLeft: 23,
             }}
           >
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => backPress()}>
               <AntDesign name="left" size={40} color="#000000"></AntDesign>
             </TouchableOpacity>
             <Text style={{ fontSize: 16 }}>3/4</Text>
@@ -860,7 +920,7 @@ export default function Auth(props: Props) {
               paddingLeft: 23,
             }}
           >
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => backPress()}>
               <AntDesign name="left" size={40} color="#000000"></AntDesign>
             </TouchableOpacity>
             <Text style={{ fontSize: 16 }}>4/4</Text>
@@ -879,11 +939,39 @@ export default function Auth(props: Props) {
             durantion={800}
           >
             <View style={{ flex: 1 }}>
-              <View style={{ flex: 90 }}>
-                <View style={{ flex: 1, borderWidth: 1, borderColor: '#E3EBEE', borderRadius: 20 }}></View>
-              </View>
+              {image ? (
+                <TouchableOpacity style={{ flex: 90, alignItems: 'center', justifyContent: 'center' }}>
+                  <Image source={{ uri: image }} resizeMode="cover" style={{ width: '100%', height: '100%' }}></Image>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity style={{ flex: 90 }} onPress={() => pickImage()}>
+                  <View
+                    style={{
+                      flex: 1,
+                      borderWidth: 1,
+                      borderColor: '#E3EBEE',
+                      borderRadius: 20,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <MaterialIcons
+                      name="arrow-upward"
+                      size={120}
+                      color="#07877D"
+                      style={{ marginBottom: 50 }}
+                    ></MaterialIcons>
+                    <Text style={{ fontWeight: 'bold', fontSize: 24 }}>Upload your document</Text>
+                  </View>
+                </TouchableOpacity>
+              )}
               <View style={{ flex: 10, alignItems: 'center', justifyContent: 'center' }}>
-                <Button title="Verify" onClick={() => setStep('accountCode')} />
+                <Button
+                  title="Verify"
+                  onClick={() => console.log('OOOW')}
+                  disabled={image ? false : true}
+                  style={{ backgroundColor: image ? '#07877D' : '#D3DBDE', borderColor: image ? '#07877D' : '#D3DBDE' }}
+                />
                 <TouchableOpacity style={{ marginTop: 20 }}>
                   <Text style={{ color: '#07877D', fontSize: 16 }}>Need support?</Text>
                 </TouchableOpacity>
