@@ -1,10 +1,10 @@
 # BankingApp
 
-BankingApp it's a layout created in react native using expo with objective of study.
+BankingApp it's a layout created in React Native using [EXPO](https://expo.io) with objective of study.
 
 # Installation
 
-For install packages use this command:
+For install all packages use this command:
 
 ```bash
 npm install
